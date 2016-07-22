@@ -1,4 +1,10 @@
-/* public domain, do as you wish */
+/* 
+   This code is Public Domain, do as you wish.
+   "Forked" from the blog "flak" at http://www.tedunangst.com/flak/ 
+   to have a version-controlled version available for repackacking 
+   for the package managers of various GNU/Linux distributions.
+*/
+
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
 #include <X11/Xatom.h>
@@ -7,8 +13,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-
-/* cribbed from redshift, but truncated with 500K steps */
+/* Data from redshift, truncated with 500K steps. */
 static const struct { float r; float g; float b; } whitepoints[] = {
 	{ 1.00000000,  0.18172716,  0.00000000, }, /* 1000K */
 	{ 1.00000000,  0.42322816,  0.00000000, },
@@ -46,10 +51,12 @@ main(int argc, char **argv)
 		temp = atoi(argv[1]);
 	if (temp < 1000 || temp > 10000)
 		temp = 6500;
-
 	temp -= 1000;
+	
 	double ratio = temp % 500 / 500.0;
+	
 #define AVG(c) whitepoints[temp / 500].c * (1 - ratio) + whitepoints[temp / 500 + 1].c * ratio
+	
 	double gammar = AVG(r);
 	double gammag = AVG(g);
 	double gammab = AVG(b);
@@ -60,7 +67,6 @@ main(int argc, char **argv)
 		XRRCrtcInfo *crtc_info = XRRGetCrtcInfo(dpy, res, crtcxid);
 
 		int size = XRRGetCrtcGammaSize(dpy, crtcxid);
-
 		XRRCrtcGamma *crtc_gamma = XRRAllocGamma(size);
 
 		for (int i = 0; i < size; i++) {
@@ -69,9 +75,9 @@ main(int argc, char **argv)
 			crtc_gamma->green[i] = g * gammag;
 			crtc_gamma->blue[i] = g * gammab;
 		}
-		XRRSetCrtcGamma(dpy, crtcxid, crtc_gamma);
 
+		XRRSetCrtcGamma(dpy, crtcxid, crtc_gamma);
 		XFree(crtc_gamma);
+		
 	}
 }
-

@@ -1,1 +1,2 @@
 # sct
+Project forked from a blog called [flak](http://www.tedunangst.com/flak/post/sct-set-color-temperature) to ensure an unchanging version controlled copy is available for (re)packacking in various GNU/Linux distributions.
